@@ -44,6 +44,14 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- mysql -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.44</version> <!-- Foi necessário especificar essa versão pois a versão padrão 5.1.41 não funciona -->
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
