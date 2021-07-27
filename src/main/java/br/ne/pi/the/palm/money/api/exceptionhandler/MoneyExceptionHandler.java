@@ -20,12 +20,23 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/** 
+ * Classe que trata as exceções lançadas pelas classes do pacote resource.
+ * 
+ * @author Pedro Alex
+ * */
 @ControllerAdvice
 public class MoneyExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Autowired
 	private MessageSource messageSource;
 	
+	/**
+	 * Retorna uma exceção quando não é possível ler o que foi passado na requisição.
+	 * 
+	 * @param MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request
+	 * @return ResponseEntity<Object>
+	 */
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -35,6 +46,12 @@ public class MoneyExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 	}
 	
+	/**
+	 * Retorna uma exceção quando os argumentos passados na requisição são inválidos.
+	 * 
+	 * @param MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request
+	 * @return ResponseEntity<Object>
+	 */
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -42,6 +59,12 @@ public class MoneyExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 	}
 	
+	/**
+	 * Retorna uma exceção quando o recurso requisitado não é encontrado.
+	 * 
+	 * @param EmptyResultDataAccessException ex, WebRequest request
+	 * @return ResponseEntity<Object>
+	 */
 	@ExceptionHandler({EmptyResultDataAccessException.class})
 	public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage("recurso.nao-encontrado", null, LocaleContextHolder.getLocale());
@@ -50,6 +73,12 @@ public class MoneyExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 	
+	/**
+	 * Retorna uma lista com todos os erros encontrados.
+	 * 
+	 * @param EmptyResultDataAccessException ex, WebRequest request
+	 * @return List<Erro>
+	 */
 	private List<Erro> criarListaDeErros(BindingResult bindingResult){
 		List<Erro> erros = new ArrayList<>();
 		
@@ -62,6 +91,11 @@ public class MoneyExceptionHandler extends ResponseEntityExceptionHandler {
 		return erros;
 	}
 	
+	/** 
+	 * Classe estática utilizada para representar as mensagens de erro ao usuário e ao desenvolvedor.
+	 * 
+	 * @author Pedro Alex
+	 * */
 	public static class Erro {
 		
 		private String mensagemUsuario;

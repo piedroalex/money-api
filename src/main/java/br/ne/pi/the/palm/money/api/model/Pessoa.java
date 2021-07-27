@@ -8,6 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+/** 
+ * Classe que representa o modelo Pessoa.
+ * 
+ * @author Pedro Alex
+ * */
 @Entity
 @Table(name="pessoa")
 public class Pessoa {

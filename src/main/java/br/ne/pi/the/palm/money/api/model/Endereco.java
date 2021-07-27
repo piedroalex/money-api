@@ -2,6 +2,11 @@ package br.ne.pi.the.palm.money.api.model;
 
 import javax.persistence.Embeddable;
 
+/** 
+ * Classe embutida que representa um Endereco.
+ * 
+ * @author Pedro Alex
+ * */
 @Embeddable
 public class Endereco {
 

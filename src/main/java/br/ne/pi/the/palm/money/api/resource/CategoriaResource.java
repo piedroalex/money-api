@@ -20,6 +20,11 @@ import br.ne.pi.the.palm.money.api.event.RecursoCriadoEvent;
 import br.ne.pi.the.palm.money.api.model.Categoria;
 import br.ne.pi.the.palm.money.api.repository.CategoriaRepository;
 
+/** 
+ * Classe de acesso ao recurso Categoria.
+ * 
+ * @author Pedro Alex
+ * */
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaResource {
@@ -30,11 +35,22 @@ public class CategoriaResource {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
+	/**
+	 * Retorna uma lista com todas as categorias.
+	 * 
+	 * @return List<Categoria>
+	 */
 	@GetMapping
 	public List<Categoria> listar(){
 		return categoriaRepository.findAll();
 	}
 	
+	/**
+	 * Salva uma nova categoria.
+	 * 
+	 * @param Categoria categoria, HttpServletResponse response
+	 * @return ResponseEntity<Categoria>
+	 */
 	@PostMapping
 	public ResponseEntity<Categoria> criar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
 		Categoria retorno = categoriaRepository.save(categoria);
@@ -42,6 +58,12 @@ public class CategoriaResource {
 		return ResponseEntity.status(HttpStatus.CREATED).body(retorno);
 	}
 	
+	/**
+	 * Retorna uma categoria de acordo com um código.
+	 * 
+	 * @param Long codigo
+	 * @return ResponseEntity<Categoria>
+	 */
 	@GetMapping("/{codigo}")
 	public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long codigo) {
 		Categoria retorno = categoriaRepository.findOne(codigo);

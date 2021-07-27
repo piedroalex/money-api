@@ -22,6 +22,11 @@ import br.ne.pi.the.palm.money.api.event.RecursoCriadoEvent;
 import br.ne.pi.the.palm.money.api.model.Pessoa;
 import br.ne.pi.the.palm.money.api.repository.PessoaRepository;
 
+/** 
+ * Classe de acesso ao recurso Pessoa.
+ * 
+ * @author Pedro Alex
+ * */
 @RestController
 @RequestMapping("/pessoas")
 public class PessoaResource {
@@ -32,11 +37,22 @@ public class PessoaResource {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
+	/**
+	 * Retorna uma lista com todas as pessoas.
+	 * 
+	 * @return List<Pessoa>
+	 */
 	@GetMapping
 	public List<Pessoa> listar(){
 		return pessoaRepository.findAll();
 	}
 	
+	/**
+	 * Salva uma nova pessoa.
+	 * 
+	 * @param Pessoa pessoa, HttpServletResponse response
+	 * @return ResponseEntity<Pessoa>
+	 */
 	@PostMapping
 	public ResponseEntity<Pessoa> criar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
 		Pessoa retorno = pessoaRepository.save(pessoa);
@@ -44,6 +60,12 @@ public class PessoaResource {
 		return ResponseEntity.status(HttpStatus.CREATED).body(retorno);
 	}
 	
+	/**
+	 * Retorna uma pessoa de acordo com um código.
+	 * 
+	 * @param Long codigo
+	 * @return ResponseEntity<Pessoa>
+	 */
 	@GetMapping("/{codigo}")
 	public ResponseEntity<Pessoa> buscarPeloCodigo(@PathVariable Long codigo) {
 		Pessoa retorno = pessoaRepository.findOne(codigo);
@@ -51,6 +73,12 @@ public class PessoaResource {
 		
 	}
 	
+	/**
+	 * Remove uma pessoa de acordo com um código.
+	 * 
+	 * @param Long codigo
+	 * @return ResponseEntity<Pessoa>
+	 */
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long codigo) {
