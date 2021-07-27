@@ -27,7 +27,7 @@ public class PessoaService {
 		pessoaRepository.save(retorno);
 	}
 	
-	private Pessoa buscarPessoaPeloCodigo(Long codigo) {
+	public Pessoa buscarPessoaPeloCodigo(Long codigo) {
 		Pessoa retorno = pessoaRepository.findOne(codigo);
 		if(retorno == null) {
 			throw new EmptyResultDataAccessException(1);
