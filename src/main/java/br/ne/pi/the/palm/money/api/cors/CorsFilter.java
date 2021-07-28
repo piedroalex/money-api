@@ -11,15 +11,19 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import br.ne.pi.the.palm.money.api.config.property.MoneyApiProperty;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE) //Filtro com prioridade alta
 public class CorsFilter implements Filter{
 
-	private String originPermitida = "http://localhost:8000"; // TODO: Configurar para diferentes ambientes
+	@Autowired
+	private MoneyApiProperty moneyApiProperty;
 	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -28,10 +32,10 @@ public class CorsFilter implements Filter{
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		
-		resp.setHeader("Access-Control-Allow-Origin", originPermitida);
+		resp.setHeader("Access-Control-Allow-Origin", moneyApiProperty.getOriginPermitida());
 		resp.setHeader("Access-Control-Allow-Credentials", "true");
 		
-		if("OPTIONS".equals(req.getMethod())) {
+		if("OPTIONS".equals(req.getMethod()) && moneyApiProperty.getOriginPermitida().equals(req.getHeader("Origin"))) {
 			resp.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS");
 			resp.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept");
 			resp.setHeader("Access-Control-Max-Age", "3600");
