@@ -1,4 +1,4 @@
-package br.ne.pi.the.palm.money.api.secutity.util;
+package br.ne.pi.the.palm.money.api.security.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
