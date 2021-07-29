@@ -1,5 +1,6 @@
 package br.ne.pi.the.palm.money.api.service;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +25,33 @@ public class LancamentoService {
 			throw new PessoaInexistenteOuInativaException();
 		}
 		return lancamentoRepository.save(lancamento);
+	}
+	
+	public Lancamento atualizar(Long codigo, Lancamento lancamento) {
+		Lancamento retorno = buscarLancamentoExistente(codigo);
+		if(!lancamento.getPessoa().equals(retorno.getPessoa())) {
+			validarPessoa(lancamento);
+		}
+		
+		BeanUtils.copyProperties(lancamento, retorno, "codigo");
+		return lancamentoRepository.save(retorno);
+	}
+
+	private void validarPessoa(Lancamento lancamento) {
+		Pessoa pessoa = null;
+		if(lancamento.getPessoa().getCodigo() != null) {
+			pessoa = pessoaRepository.findOne(lancamento.getPessoa().getCodigo());
+		}
+		if(pessoa == null || pessoa.isInativo()) {
+			throw new PessoaInexistenteOuInativaException();
+		}
+	}
+
+	private Lancamento buscarLancamentoExistente(Long codigo) {
+		Lancamento retorno = lancamentoRepository.findOne(codigo);
+		if(retorno == null) {
+			throw new IllegalArgumentException();
+		}
+		return retorno;
 	}
 }
