@@ -1,5 +1,6 @@
 package br.ne.pi.the.palm.money.api.resource;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.ne.pi.the.palm.money.api.dto.LancamentoEstatisticaCategoria;
 import br.ne.pi.the.palm.money.api.event.RecursoCriadoEvent;
 import br.ne.pi.the.palm.money.api.exceptionhandler.MoneyExceptionHandler.Erro;
 import br.ne.pi.the.palm.money.api.model.Lancamento;
@@ -55,6 +57,12 @@ public class LancamentoResource {
 	
 	@Autowired
 	private MessageSource messageSource;
+	
+	@GetMapping("/estatisticas/por-categoria")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
+	public List<LancamentoEstatisticaCategoria> porCategoria() {
+		return this.lancamentoRepository.porCategoria(LocalDate.now());
+	}
 	
 	/**
 	 * Retorna uma lista com todas os lancamentos.
