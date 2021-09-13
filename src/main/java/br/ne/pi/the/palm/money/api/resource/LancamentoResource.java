@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ne.pi.the.palm.money.api.dto.LancamentoEstatisticaCategoria;
+import br.ne.pi.the.palm.money.api.dto.LancamentoEstatisticaDia;
 import br.ne.pi.the.palm.money.api.event.RecursoCriadoEvent;
 import br.ne.pi.the.palm.money.api.exceptionhandler.MoneyExceptionHandler.Erro;
 import br.ne.pi.the.palm.money.api.model.Lancamento;
@@ -57,6 +58,12 @@ public class LancamentoResource {
 	
 	@Autowired
 	private MessageSource messageSource;
+	
+	@GetMapping("/estatisticas/por-dia")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
+	public List<LancamentoEstatisticaDia> porDia() {
+		return this.lancamentoRepository.porDia(LocalDate.now());
+	}
 	
 	@GetMapping("/estatisticas/por-categoria")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")

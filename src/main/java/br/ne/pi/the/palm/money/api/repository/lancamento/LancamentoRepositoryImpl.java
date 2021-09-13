@@ -52,7 +52,7 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 						ultimoDia));
 		
 		criteriaQuery.groupBy(root.get("tipo"), 
-				root.get("dataVencimento"));
+				root.get("dataVencimento"	));
 		
 		TypedQuery<LancamentoEstatisticaDia> typedQuery = manager
 				.createQuery(criteriaQuery);
