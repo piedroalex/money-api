@@ -8,11 +8,14 @@ import org.springframework.data.domain.Pageable;
 
 import br.ne.pi.the.palm.money.api.dto.LancamentoEstatisticaCategoria;
 import br.ne.pi.the.palm.money.api.dto.LancamentoEstatisticaDia;
+import br.ne.pi.the.palm.money.api.dto.LancamentoEstatisticaPessoa;
 import br.ne.pi.the.palm.money.api.model.Lancamento;
 import br.ne.pi.the.palm.money.api.repository.filter.LancamentoFilter;
 import br.ne.pi.the.palm.money.api.repository.projection.ResumoLancamento;
 
 public interface LancamentoRepositoryQuery {
+
+	public List<LancamentoEstatisticaPessoa> porPessoa(LocalDate inicio, LocalDate fim);
 	
 	public List<LancamentoEstatisticaCategoria> porCategoria(LocalDate mesReferencia);
 
