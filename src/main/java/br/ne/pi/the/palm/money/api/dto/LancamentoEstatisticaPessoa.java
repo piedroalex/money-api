@@ -1,4 +1,4 @@
-package br.ne.pi.the.palm.money.api.repository.lancamento;
+package br.ne.pi.the.palm.money.api.dto;
 
 import java.math.BigDecimal;
 
