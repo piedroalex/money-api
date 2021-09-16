@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /** 
  * Classe que representa o modelo Lancamento.
  * 
@@ -56,6 +58,11 @@ public class Lancamento {
 	@ManyToOne
 	@JoinColumn(name = "codigo_pessoa")
 	private Pessoa pessoa;
+	
+	@JsonIgnore
+	public Boolean isReceita() {
+		return TipoLancamento.RECEITA.equals(this.tipo);
+	}
 	
 	public Long getCodigo() {
 		return codigo;
