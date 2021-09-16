@@ -52,6 +52,8 @@ public class MoneyApiProperty {
 		private String accessKeyId;
 		
 		private String secretAccessKey;
+		
+		private String bucket = "palm-money-arquivos";
 
 		public String getAccessKeyId() {
 			return accessKeyId;
@@ -67,6 +69,14 @@ public class MoneyApiProperty {
 
 		public void setSecretAccessKey(String secretAccessKey) {
 			this.secretAccessKey = secretAccessKey;
+		}		
+
+		public String getBucket() {
+			return bucket;
+		}
+		
+		public void setBucket(String bucket) {
+			this.bucket = bucket;
 		}
 	}
 	
