@@ -64,8 +64,7 @@ public class Mailer {
 		this.enviarEmail(remetente, destinatarios, assunto, mensagem);
 	}
 	
-	public void enviarEmail(String remetente, 
-			List<String> destinatarios, String assunto, String mensagem) {
+	public void enviarEmail(String remetente, List<String> destinatarios, String assunto, String mensagem) {
 		try {
 			MimeMessage mimeMessage = mailSender.createMimeMessage();
 			
