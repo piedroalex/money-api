@@ -1,47 +1,40 @@
 package br.ne.pi.the.palm.money.api.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
-/** 
- * Classe que representa o modelo Pessoa.
- * 
- * @author Pedro Alex
- * */
 @Entity
-@Table(name="pessoa")
-public class Pessoa {
-
+@Table(name = "contato")
+public class Contato {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 	
-	@NotNull
+	@NotEmpty
 	private String nome;
 	
-	@Embedded
-	private Endereco endereco;
+	@Email
+	@NotNull
+	private String email;
+	
+	@NotEmpty
+	private String telefone;
 	
 	@NotNull
-	private Boolean ativo;
-	
-	@Valid
-	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
-	private List<Contato> contatos;
-	
+	@ManyToOne
+	@JoinColumn(name = "codigo_pessoa")
+	private Pessoa pessoa;
+
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -57,29 +50,31 @@ public class Pessoa {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
-	public Endereco getEndereco() {
-		return endereco;
+
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public Boolean getAtivo() {
-		return ativo;
+	public String getTelefone() {
+		return telefone;
 	}
 
-	public void setAtivo(Boolean ativo) {
-		this.ativo = ativo;
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
 	}
 
-	@JsonIgnore
-	@Transient
-	public Boolean isInativo() {
-		return !this.ativo;
+	public Pessoa getPessoa() {
+		return pessoa;
 	}
-	
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -96,7 +91,7 @@ public class Pessoa {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pessoa other = (Pessoa) obj;
+		Contato other = (Contato) obj;
 		if (codigo == null) {
 			if (other.codigo != null)
 				return false;
@@ -104,6 +99,4 @@ public class Pessoa {
 			return false;
 		return true;
 	}
-	
-	
 }
