@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import br.ne.pi.the.palm.money.api.dto.LancamentoEstatisticaPessoa;
@@ -32,6 +33,16 @@ public class LancamentoService {
 	@Autowired
 	private PessoaRepository pessoaRepository;
 
+	@Scheduled(cron = "0 0 6 * * *") // segundo, minuto, hora, dia do mês, mês, dia da semana
+	public void avisarSobreLancamentosVencidos() {
+		System.out.println(">>>>>>>>>>>>>>> Método sendo executado...");
+	}
+	
+	/*@Scheduled(fixedDelay = 1000 * 5)
+	public void avisarSobreLancamentosVencidos() {
+		System.out.println(">>>>>>>>>>>>>>> Método sendo executado...");
+	}*/
+	
 	public byte[] relatorioPorPessoa(LocalDate inicio, LocalDate fim) throws Exception {
 		List<LancamentoEstatisticaPessoa> dados = lancamentoRepository.porPessoa(inicio, fim);
 		
