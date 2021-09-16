@@ -14,10 +14,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import br.ne.pi.the.palm.money.api.dto.LancamentoEstatisticaPessoa;
+import br.ne.pi.the.palm.money.api.mail.Mailer;
 import br.ne.pi.the.palm.money.api.model.Lancamento;
 import br.ne.pi.the.palm.money.api.model.Pessoa;
+import br.ne.pi.the.palm.money.api.model.Usuario;
 import br.ne.pi.the.palm.money.api.repository.LancamentoRepository;
 import br.ne.pi.the.palm.money.api.repository.PessoaRepository;
+import br.ne.pi.the.palm.money.api.repository.UsuarioRepository;
 import br.ne.pi.the.palm.money.api.service.exception.PessoaInexistenteOuInativaException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -27,15 +30,29 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @Service
 public class LancamentoService {
 
+	private static final String DESTINATARIOS = "ROLE_PESQUISAR_LANCAMENTO";
+	
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
 
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private Mailer mailer;
 
 	@Scheduled(cron = "0 0 6 * * *") // segundo, minuto, hora, dia do mês, mês, dia da semana
 	public void avisarSobreLancamentosVencidos() {
-		System.out.println(">>>>>>>>>>>>>>> Método sendo executado...");
+		List<Lancamento> vencidos = lancamentoRepository
+				.findByDataVencimentoLessThanEqualAndDataPagamentoIsNull(LocalDate.now());
+		
+		List<Usuario> destinatarios = usuarioRepository
+				.findByPermissoesDescricao(DESTINATARIOS);
+		
+		mailer.avisarSobreLancamentosVencidos(vencidos, destinatarios);
 	}
 	
 	/*@Scheduled(fixedDelay = 1000 * 5)
