@@ -10,9 +10,15 @@ public class MoneyApiProperty {
 	private final Seguranca seguranca = new Seguranca(); 
 	
 	private final Mail mail = new Mail();
+
+	private final S3 s3 = new S3();
 	
 	public Mail getMail() {
 		return mail;
+	}
+	
+	public S3 getS3() {
+		return s3;
 	}
 	
 	public String getOriginPermitida() {
@@ -41,7 +47,30 @@ public class MoneyApiProperty {
 		
 	}
 	
-public static class Mail {
+	public static class S3 {
+		
+		private String accessKeyId;
+		
+		private String secretAccessKey;
+
+		public String getAccessKeyId() {
+			return accessKeyId;
+		}
+
+		public void setAccessKeyId(String accessKeyId) {
+			this.accessKeyId = accessKeyId;
+		}
+
+		public String getSecretAccessKey() {
+			return secretAccessKey;
+		}
+
+		public void setSecretAccessKey(String secretAccessKey) {
+			this.secretAccessKey = secretAccessKey;
+		}
+	}
+	
+	public static class Mail {
 		
 		private String host;
 		
