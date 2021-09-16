@@ -1,8 +1,6 @@
 package br.ne.pi.the.palm.money.api.resource;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.ne.pi.the.palm.money.api.dto.Anexo;
 import br.ne.pi.the.palm.money.api.dto.LancamentoEstatisticaCategoria;
 import br.ne.pi.the.palm.money.api.dto.LancamentoEstatisticaDia;
 import br.ne.pi.the.palm.money.api.event.RecursoCriadoEvent;
@@ -45,6 +44,7 @@ import br.ne.pi.the.palm.money.api.repository.filter.LancamentoFilter;
 import br.ne.pi.the.palm.money.api.repository.projection.ResumoLancamento;
 import br.ne.pi.the.palm.money.api.service.LancamentoService;
 import br.ne.pi.the.palm.money.api.service.exception.PessoaInexistenteOuInativaException;
+import br.ne.pi.the.palm.money.api.storage.S3;
 
 /** 
  * Classe de acesso ao recurso Lancamento.
@@ -65,15 +65,16 @@ public class LancamentoResource {
 	private ApplicationEventPublisher publisher;
 	
 	@Autowired
-	private MessageSource messageSource;
+	private MessageSource messageSource;	
+
+	@Autowired
+	private S3 s3;
 	
 	@PostMapping("/anexo")
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and #oauth2.hasScope('write')")
-	public String uploadAnexo(@RequestParam MultipartFile anexo) throws IOException {
-		OutputStream out = new FileOutputStream("C:\\Users\\piedr\\Desktop\\anexo--" + anexo.getOriginalFilename());
-		out.write(anexo.getBytes());
-		out.close();
-		return "ok";
+	public Anexo uploadAnexo(@RequestParam MultipartFile anexo) throws IOException {
+		String nome = s3.salvarTemporariamente(anexo);
+		return new Anexo(nome, s3.configurarUrl(nome));
 	}
 	
 	@GetMapping("/relatorios/por-pessoa")
