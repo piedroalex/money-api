@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import br.ne.pi.the.palm.money.api.dto.LancamentoEstatisticaPessoa;
 import br.ne.pi.the.palm.money.api.mail.Mailer;
@@ -24,6 +25,7 @@ import br.ne.pi.the.palm.money.api.repository.LancamentoRepository;
 import br.ne.pi.the.palm.money.api.repository.PessoaRepository;
 import br.ne.pi.the.palm.money.api.repository.UsuarioRepository;
 import br.ne.pi.the.palm.money.api.service.exception.PessoaInexistenteOuInativaException;
+import br.ne.pi.the.palm.money.api.storage.S3;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -47,6 +49,9 @@ public class LancamentoService {
 	
 	@Autowired
 	private Mailer mailer;
+	
+	@Autowired
+	private S3 s3;
 
 	@Scheduled(cron = "0 0 6 * * *") // segundo, minuto, hora, dia do mês, mês, dia da semana
 	public void avisarSobreLancamentosVencidos() {
@@ -99,9 +104,10 @@ public class LancamentoService {
 	}
 	
 	public Lancamento salvar(Lancamento lancamento) {
-		Pessoa pessoa = pessoaRepository.findOne(lancamento.getPessoa().getCodigo());
-		if(pessoa == null || pessoa.isInativo()) {
-			throw new PessoaInexistenteOuInativaException();
+		validarPessoa(lancamento);
+		
+		if (StringUtils.hasText(lancamento.getAnexo())) {
+			s3.salvar(lancamento.getAnexo());
 		}
 		return lancamentoRepository.save(lancamento);
 	}
