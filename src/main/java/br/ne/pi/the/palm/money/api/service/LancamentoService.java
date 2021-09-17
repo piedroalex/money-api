@@ -121,7 +121,7 @@ public class LancamentoService {
 		
 		if (StringUtils.isEmpty(lancamento.getAnexo()) && StringUtils.hasText(retorno.getAnexo())) {
 			s3.remover(retorno.getAnexo());
-		} else if (StringUtils.hasLength(lancamento.getAnexo()) && !lancamento.getAnexo().equals(retorno.getAnexo())) {
+		} else if (StringUtils.hasText(lancamento.getAnexo()) && !lancamento.getAnexo().equals(retorno.getAnexo())) {
 			s3.substituir(retorno.getAnexo(), lancamento.getAnexo());
 		}
 		
