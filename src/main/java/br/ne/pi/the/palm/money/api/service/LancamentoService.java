@@ -114,8 +114,15 @@ public class LancamentoService {
 	
 	public Lancamento atualizar(Long codigo, Lancamento lancamento) {
 		Lancamento retorno = buscarLancamentoExistente(codigo);
+		
 		if(!lancamento.getPessoa().equals(retorno.getPessoa())) {
 			validarPessoa(lancamento);
+		}
+		
+		if (StringUtils.isEmpty(lancamento.getAnexo()) && StringUtils.hasText(retorno.getAnexo())) {
+			s3.remover(retorno.getAnexo());
+		} else if (StringUtils.hasLength(lancamento.getAnexo()) && !lancamento.getAnexo().equals(retorno.getAnexo())) {
+			s3.substituir(retorno.getAnexo(), lancamento.getAnexo());
 		}
 		
 		BeanUtils.copyProperties(lancamento, retorno, "codigo");
