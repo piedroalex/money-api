@@ -1,5 +1,7 @@
 package br.ne.pi.the.palm.money.api.resource;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -79,8 +81,8 @@ public class PessoaResource {
 	@GetMapping("/{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
 	public ResponseEntity<Pessoa> buscarPeloCodigo(@PathVariable Long codigo) {
-		Pessoa retorno = pessoaRepository.findOne(codigo);
-		return retorno != null ? ResponseEntity.ok(retorno) : ResponseEntity.notFound().build();
+		Optional<Pessoa> retorno = pessoaRepository.findById(codigo);
+		return retorno.isPresent() ? ResponseEntity.ok(retorno.get()) : ResponseEntity.notFound().build();
 		
 	}
 	
@@ -94,7 +96,7 @@ public class PessoaResource {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasAuthority('ROLE_REMOVER_PESSOA') and #oauth2.hasScope('write')")
 	public void remover(@PathVariable Long codigo) {
-		pessoaRepository.delete(codigo);
+		pessoaRepository.deleteById(codigo);
 	}
 	
 	@PutMapping("/{codigo}")

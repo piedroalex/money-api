@@ -1,5 +1,7 @@
 package br.ne.pi.the.palm.money.api.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -37,10 +39,10 @@ public class PessoaService {
 	}
 	
 	public Pessoa buscarPessoaPeloCodigo(Long codigo) {
-		Pessoa retorno = pessoaRepository.findOne(codigo);
-		if(retorno == null) {
+		Optional<Pessoa> retorno = pessoaRepository.findById(codigo);
+		if(!retorno.isPresent()) {
 			throw new EmptyResultDataAccessException(1);
 		}
-		return retorno;
+		return retorno.get();
 	}
 }

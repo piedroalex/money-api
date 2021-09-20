@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,7 +133,7 @@ public class LancamentoService {
 	private void validarPessoa(Lancamento lancamento) {
 		Pessoa pessoa = null;
 		if(lancamento.getPessoa().getCodigo() != null) {
-			pessoa = pessoaRepository.findOne(lancamento.getPessoa().getCodigo());
+			pessoa = pessoaRepository.getOne(lancamento.getPessoa().getCodigo());
 		}
 		if(pessoa == null || pessoa.isInativo()) {
 			throw new PessoaInexistenteOuInativaException();
@@ -140,10 +141,10 @@ public class LancamentoService {
 	}
 
 	private Lancamento buscarLancamentoExistente(Long codigo) {
-		Lancamento retorno = lancamentoRepository.findOne(codigo);
-		if(retorno == null) {
+		Optional<Lancamento> retorno = lancamentoRepository.findById(codigo);
+		if(!retorno.isPresent()) {
 			throw new IllegalArgumentException();
 		}
-		return retorno;
+		return retorno.get();
 	}
 }

@@ -1,6 +1,7 @@
 package br.ne.pi.the.palm.money.api.resource;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -70,8 +71,8 @@ public class CategoriaResource {
 	@GetMapping("/{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
 	public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long codigo) {
-		Categoria retorno = categoriaRepository.findOne(codigo);
-		return retorno != null ? ResponseEntity.ok(retorno) : ResponseEntity.notFound().build();
+		Optional<Categoria> retorno = categoriaRepository.findById(codigo);
+		return retorno.isPresent() ? ResponseEntity.ok(retorno.get()) : ResponseEntity.notFound().build();
 		
 	}
 }
